@@ -1,9 +1,8 @@
-from transformers import TrainingArguments, Trainer, EarlyStoppingCallback
+from transformers import TrainingArguments, EarlyStoppingCallback
 from datasets import load_dataset
-from torch import Tensor
 
 from libs.weighted_trainer import WeightedTrainer, calculate_balance_weight
-from libs.paths import RESULTS_PATH, DATA_PATH
+from libs.paths import RESULTS_PATH
 from libs.eval import Evaluator
 from libs.utils import write_json, read_config, mkdir_experiment
 from libs.processing import prepare_model, compute_metrics
@@ -76,6 +75,7 @@ if __name__ == "__main__":
     parser.add_argument("-tr", "--train", required=True)
     parser.add_argument("-te", "--test", required=True)
     args = parser.parse_args()
+    
     main(
         args.train,
         args.test
