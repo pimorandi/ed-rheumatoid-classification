@@ -2,6 +2,7 @@ import numpy as np
 
 import torch
 import torch.nn as nn
+from torch.nn.functional import binary_cross_entropy_with_logits
 from torch.utils.data import WeightedRandomSampler
 
 from transformers import Trainer
@@ -55,13 +56,27 @@ class WeightedTrainer(Trainer):
             if self.class_weights.device != logits.device:
                 self.class_weights = self.class_weights.to(logits.device)
             
+            weights = torch.where(
+                labels==1, 
+                self.class_weights[1], 
+                self.class_weights[0]
+                )
             # Use CrossEntropyLoss with class weights
-            loss_fct = nn.CrossEntropyLoss(weight=self.class_weights)
-            loss = loss_fct(logits, labels.view(-1,1))
+            # loss_fct = nn.CrossEntropyLoss(weight=self.class_weights)
+            # loss = loss_fct(logits, labels.view(-1,1))
+            loss = binary_cross_entropy_with_logits(
+                input=logits.flatten(), 
+                target=torch.Tensor(labels),
+                weight=weights,
+                )
         else:
             # Standard loss computation (same as default Trainer)
-            loss_fct = nn.CrossEntropyLoss()
-            loss = loss_fct(logits, labels.view(-1,1))
+            # loss_fct = nn.CrossEntropyLoss()
+            # loss = loss_fct(logits, labels.view(-1,1))
+            loss = binary_cross_entropy_with_logits(
+                input=logits.flatten(), 
+                target=torch.Tensor(labels),
+                )
         
         return (loss, outputs) if return_outputs else loss
 
