@@ -4,6 +4,9 @@ data/processed/*.json
 __pycache__
 *.ipynb
 procedures/*.sql
+mlruns/
+results/
 
 !data/raw/README.md
 !data/processed/README.md
+!results/README.md
