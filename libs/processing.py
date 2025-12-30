@@ -1,9 +1,11 @@
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, DataCollatorWithPadding
 import evaluate
 
-def prepare_model(model_name="dbmdz/bert-base-italian-uncased", freeze_base=True):
+def prepare_model(model_name="dbmdz/bert-base-italian-uncased", dropout_prob=0.1, freeze_base=True):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=1)
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name, num_labels=1, hidden_dropout_prob=dropout_prob
+        )
     if freeze_base:
         for param in model.base_model.parameters():
             param.requires_grad = False
