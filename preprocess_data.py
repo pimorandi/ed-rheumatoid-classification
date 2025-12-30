@@ -1,6 +1,5 @@
 from libs.utils import load_data, get_data, read_config
 from libs.processing  import prepare_model, preprocess_function
-from libs.paths import DATA_PATH
 
 import dotenv
 import os
@@ -32,6 +31,6 @@ def main(filename):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-f","--filename",required=True)
+    parser.add_argument("-f","--filename", required=True)
     args = parser.parse_args()
     main(args.filename)
