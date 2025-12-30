@@ -1,8 +1,8 @@
 {
-    "source_df": "./data/raw/artr_psor_drugs_grouped.csv",
+    "source_df": "./data/raw/psor_cohort.sample",
     "txt_column": "ps_01_patologia_descrittiva",
     "anonim_column": "id_ingresso_ps",
     "n_control": 5,
-    "train_save_path": "./data/processed/matched_psor_train.csv",
-    "test_save_path": "./data/processed/matched_psor_test.csv"
+    "train_save_path": "./data/processed/sample_train.sample",
+    "test_save_path": "./data/processed/sample_test.sample"
 }
