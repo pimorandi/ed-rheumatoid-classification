@@ -18,7 +18,8 @@ def main(train_path, test_path):
     
     model, tokenizer, data_collator = prepare_model(
         model_name=config["model_name"],
-        freeze_base=False)
+        dropout_prob=config["dropout_prob"],
+        freeze_base=config["freeze_base"])
 
     train_tokenized = load_dataset(
         'json', 
@@ -34,7 +35,7 @@ def main(train_path, test_path):
     weights = None
     if config["use_balanced_weights"]:
         weights = calculate_balance_weight(train_tokenized['label'])
-        weights = weights[1].reshape(1)
+        # weights = weights[1].reshape(1)
     training_args = TrainingArguments(
         output_dir = RESULTS_PATH / experiment / 'mdl_checkpoints',
         **config["train_arguments"]
@@ -43,7 +44,7 @@ def main(train_path, test_path):
         model=model,
         class_weights=weights,
         args=training_args,
-        callbacks=[EarlyStoppingCallback(3)],
+        callbacks=[EarlyStoppingCallback(config["early_stop_patience"])],
         train_dataset=train_tokenized,
         eval_dataset=test_tokenized,
         tokenizer=tokenizer,
@@ -72,8 +73,8 @@ def main(train_path, test_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("-tr", "--train", required=True)
-    parser.add_argument("-te", "--test", required=True)
+    parser.add_argument("-tr", "--train", default=r"data\processed\sample_train.sample")
+    parser.add_argument("-te", "--test", default=r"data\processed\sample_test.sample")
     args = parser.parse_args()
     
     main(
