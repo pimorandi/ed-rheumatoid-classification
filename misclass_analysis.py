@@ -149,7 +149,7 @@ _ = [it_stopwords.append(w) for w in to_add]
 def get_counter(txt_series):
     c = Counter()
     table = str.maketrans(dict.fromkeys(string.punctuation))
-    _ = txt_series.str.lower().str.replace(r'[\r\n]+', ' ', regex=True).apply(lambda x: x.translate(table)).str.findall(r'\b\w+\b').apply(lambda x: c.update(x))
+    _ = txt_series.fillna('empty').str.lower().str.replace(r'[\r\n]+', ' ', regex=True).apply(lambda x: x.translate(table)).str.findall(r'\b\w+\b').apply(lambda x: c.update(x))
     _ = [c.pop(sw, None) for sw in it_stopwords]
     return c
 
